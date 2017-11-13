@@ -1,8 +1,10 @@
+#### angularjs给Model添加拦截过滤器,路由增加限制，实现用户登录状态判断
+
 使用angularjs的但页面应用时，由于是本地路由在控制页面跳转，但是有的时候我们需要判断用户是否登录来判断用户是否能进入界面。
 
 angularjs是mvc架构所以实现起来很容易也很灵活，我们只MainController里增加一个路由事件侦听并判断，这样就可以避免未登录用户直接输入路由地址来跳转到登录界面地址了
 
-#### 代码中的 $rootScope.user是登录后把用户信息放到了全局rootScope上，方便其他地方使用，$rootScope.defaultPage也是默认主页面，初始化的时候写死到rootScope里的。
+##### 代码中的 $rootScope.user是登录后把用户信息放到了全局rootScope上，方便其他地方使用，$rootScope.defaultPage也是默认主页面，初始化的时候写死到rootScope里的。
 
 ```
 $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
