@@ -6,7 +6,7 @@ angularjs是mvc架构所以实现起来很容易也很灵活，我们只MainCont
 
 ##### 代码中的 $rootScope.user是登录后把用户信息放到了全局rootScope上，方便其他地方使用，$rootScope.defaultPage也是默认主页面，初始化的时候写死到rootScope里的。
 
-```
+```javascript
 $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams){
 	if(toState.name=='login')return;// 如果是进入登录界面则允许
 	// 如果用户不存在
@@ -21,7 +21,7 @@ $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState,
 
 我们在model里面增加一个用户拦截器,在rensponseError中判断错误码，抛出事件让Contoller或view来处理
 
-```
+```javascript
 app.factory('UserInterceptor', ["$q","$rootScope",function ($q,$rootScope) {
 	return {
         request:function(config){
@@ -49,7 +49,7 @@ app.factory('UserInterceptor', ["$q","$rootScope",function ($q,$rootScope) {
 
 别忘了要注册拦截器到angularjs的config中哦
 
-```
+```javascript
 app.config(function ($httpProvider) {
     $httpProvider.interceptors.push('UserInterceptor');
 });
@@ -57,7 +57,7 @@ app.config(function ($httpProvider) {
 
 最后在controller中处理错误事件
 
-```
+```javascript
 $rootScope.$on('userIntercepted',function(errorType){
 	// 跳转到登录界面，这里我记录了一个from，这样可以在登录后自动跳转到未登录之前的那个界面
 	$state.go("login",{from:$state.current.name,w:errorType});
@@ -66,7 +66,7 @@ $rootScope.$on('userIntercepted',function(errorType){
 
 最后还可以在loginController中做更多的细节处理
 
-```
+```javascript
 // 如果用户已经登录了，则立即跳转到一个默认主页上去，无需再登录
 if($rootScope.user.token){
 	$state.go($rootScope.defaultPage);
@@ -76,7 +76,7 @@ if($rootScope.user.token){
 
 另外在登录成功回调后还可以跳转到上一次界面，也就是上面记录的from
 
-```
+```javascript
 var from = $stateParams["from"];
 $state.go(from && from != "login" ? from : $rootScope.defaultPage);
 ```
